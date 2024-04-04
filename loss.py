@@ -1,6 +1,6 @@
 import torch
 import diff_operators
-import torch.nn.functional
+import torch.nn.functional as F
 
 def sdf(model_output, gt):
     '''
