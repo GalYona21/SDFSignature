@@ -6,7 +6,6 @@ Script to calculate the mesh curvatures given an implicit representation
 of it.
 """
 
-import open3d as o3d
 import numpy as np
 import torch
 from plyfile import PlyData
