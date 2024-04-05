@@ -21,6 +21,8 @@ from utils import save_ply
 def signature_calc(output, H, e1, e2):
     grad_outputs = torch.ones_like(H)
     grad_H = torch.autograd.grad(H, [output["model_in"]], grad_outputs=grad_outputs, create_graph=True)[0]
+    e1 = e1.squeeze(0)
+    e2 = e2.squeeze(0)
 
     H_1 = torch.sum(grad_H * e1, dim=-1)
     H_2 = torch.sum(grad_H * e2, dim=-1)
