@@ -24,10 +24,10 @@ def signature_calc(output, H, e1, e2):
     e1 = e1.squeeze(0)
     e2 = e2.squeeze(0)
 
-    H_1 = torch.sum(grad_H * e1, dim=-1)
-    H_2 = torch.sum(grad_H * e2, dim=-1)
+    H_1 = torch.sum(grad_H * e1, dim=-1).T
+    H_2 = torch.sum(grad_H * e2, dim=-1).T
     grad_H_1 = torch.autograd.grad(H_1, [output["model_in"]], grad_outputs=grad_outputs, create_graph=True)[0]
-    H_11 = torch.sum(grad_H_1 * e1, dim=-1)
+    H_11 = torch.sum(grad_H_1 * e1, dim=-1).T
     signature = torch.stack([H, H_1, H_2, H_11])
     return signature
 
