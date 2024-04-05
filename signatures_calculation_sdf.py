@@ -21,10 +21,10 @@ from utils import save_ply
 def signature_calc(output, H, e1, e2):
     grad_outputs = torch.ones_like(H)
     grad_H = torch.autograd.grad(H, [output["model_in"]], grad_outputs=grad_outputs, create_graph=True)[0]
-    H_1 = torch.dot(grad_H, e1)
-    H_2 = torch.dot(grad_H, e2)
+    H_1 = torch.sum(grad_H * e1, dim=1)
+    H_2 = torch.sum(grad_H * e2, dim=1)
     grad_H_1 = torch.autograd.grad(H_1, [output["model_in"]], grad_outputs=grad_outputs, create_graph=True)[0]
-    H_11 = torch.dot(grad_H_1, e1)
+    H_11 = torch.sum(grad_H_1 * e1, dim=1)
     signature = torch.stack([H, H_1, H_2, H_11])
     return signature
 
@@ -73,6 +73,8 @@ for MESH_TYPE in mesh_map.keys():
 
     # mean_curv = diff_operators.mean_curvature(y, X)
     mean_curv = (min_curv+max_curv)*0.5
+    del gradient
+    del hessian
     signature = signature_calc(out, mean_curv, max_dir, min_dir)
 
     #vertices of the mesh with the directions of min curvatures and with the min curvatures  (x, v_min, k_min)
