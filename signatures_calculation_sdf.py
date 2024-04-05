@@ -9,6 +9,8 @@ of it.
 import open3d as o3d
 import numpy as np
 import torch
+from plyfile import PlyData
+
 import diff_operators
 from model import from_pth
 from utils import save_ply
@@ -27,7 +29,16 @@ def signature_calc(output, H, e1, e2):
     signature = torch.stack([H, H_1, H_2, H_11])
     return signature
 
+def load_ply_with_attributes(filename):
+    # Load PLY file
+    ply_file = PlyData.read(filename)
+    vertex_data = ply_file.elements[0]  # properties 'x', 'y', 'z', 'nx', 'ny', 'nz', 'quality'
+    normals = np.stack((vertex_data['nx'], vertex_data['ny'], vertex_data['nz']), axis=-1)
+    quality = np.array(vertex_data['quality'])
+    vertices = np.stack((vertex_data['x'], vertex_data['y'], vertex_data['z']), axis=-1)
+    faces = np.vstack(ply_file.elements[1].data['vertex_indices'])
 
+    return vertices, normals, quality, faces
 
 mesh_map = {
     "bunny": ["./data/bunny_curvs.ply", 30],
@@ -37,12 +48,13 @@ mesh_map = {
 
 for MESH_TYPE in mesh_map.keys():
     mesh_path, w0 = mesh_map[MESH_TYPE]
-    mesh = o3d.io.read_triangle_mesh(mesh_path)
-    mesh.compute_vertex_normals()
-    mesh = o3d.t.geometry.TriangleMesh.from_legacy(mesh)
-    print(mesh)
+    # mesh = o3d.io.read_triangle_mesh(mesh_path)
+    # mesh.compute_vertex_normals()
+    # mesh = o3d.t.geometry.TriangleMesh.from_legacy(mesh)
+    # print(mesh)
+    xyz, normals, mean_curvature, faces = load_ply_with_attributes(mesh_path)
 
-    coords = torch.from_numpy(mesh.vertex["positions"].numpy())
+    coords = torch.from_numpy(xyz)
 
     model = from_pth(
         "logs/sdf_bunny/checkpoints/model_current.pth",
@@ -76,10 +88,9 @@ for MESH_TYPE in mesh_map.keys():
 
     #vertices of the mesh with their normals and with the mean curvatures  (x, N, k_mean)
     verts_mean = np.hstack((coords.squeeze(0).detach().numpy(),
-                            mesh.vertex["normals"].numpy(),
+                            normals,
                             mean_curv.squeeze(0).detach().numpy()))
 
-    faces = mesh.triangle["indices"].numpy()
 
     attrs = [("nx", "f4"), ("ny", "f4"), ("nz", "f4"), ("quality", "f4")]
     save_ply(verts_min, faces, f"./results/{MESH_TYPE}_min_curvs.ply",
