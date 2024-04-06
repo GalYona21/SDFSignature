@@ -72,3 +72,36 @@ def save_ply(
     ply_data = plyfile.PlyData([el_verts, el_faces])
     ply_data.write(filename)
 
+
+
+def rotate_point_cloud(pointcloud_vertices, pointcloud_normals,angle_x=0, angle_y=0, angle_z=0):
+    # Define rotation angles in radians
+    angle_x = np.radians(angle_x)  # Rotation around X-axis
+    angle_y = np.radians(angle_y)  # Rotation around Y-axis
+    angle_z = np.radians(angle_z)  # Rotation around Z-axis
+
+    # Define rotation matrices for each axis
+    rotation_matrix_x = np.array([[1, 0, 0],
+                                  [0, np.cos(angle_x), -np.sin(angle_x)],
+                                  [0, np.sin(angle_x), np.cos(angle_x)]])
+
+    rotation_matrix_y = np.array([[np.cos(angle_y), 0, np.sin(angle_y)],
+                                  [0, 1, 0],
+                                  [-np.sin(angle_y), 0, np.cos(angle_y)]])
+
+    rotation_matrix_z = np.array([[np.cos(angle_z), -np.sin(angle_z), 0],
+                                  [np.sin(angle_z), np.cos(angle_z), 0],
+                                  [0, 0, 1]])
+
+    # Compose the rotation matrices
+    rotation_matrix = np.dot(rotation_matrix_x, np.dot(rotation_matrix_y, rotation_matrix_z))
+
+    # Rotate the point cloud vertices
+    rotated_vertices = pointcloud_vertices.dot(rotation_matrix.T)
+    # Rotate the normals
+    rotated_normals = pointcloud_normals.dot(rotation_matrix.T)
+
+    return rotated_vertices, rotated_normals
+
+
+
