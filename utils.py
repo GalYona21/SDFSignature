@@ -83,15 +83,15 @@ def rotate_point_cloud(pointcloud_vertices, pointcloud_normals,angle_x=0, angle_
     # Define rotation matrices for each axis
     rotation_matrix_x = np.array([[1, 0, 0],
                                   [0, np.cos(angle_x), -np.sin(angle_x)],
-                                  [0, np.sin(angle_x), np.cos(angle_x)]])
+                                  [0, np.sin(angle_x), np.cos(angle_x)]], dtype=np.float32)
 
     rotation_matrix_y = np.array([[np.cos(angle_y), 0, np.sin(angle_y)],
                                   [0, 1, 0],
-                                  [-np.sin(angle_y), 0, np.cos(angle_y)]])
+                                  [-np.sin(angle_y), 0, np.cos(angle_y)]], dtype=np.float32)
 
     rotation_matrix_z = np.array([[np.cos(angle_z), -np.sin(angle_z), 0],
                                   [np.sin(angle_z), np.cos(angle_z), 0],
-                                  [0, 0, 1]])
+                                  [0, 0, 1]], dtype=np.float32)
 
     # Compose the rotation matrices
     rotation_matrix = np.dot(rotation_matrix_x, np.dot(rotation_matrix_y, rotation_matrix_z))

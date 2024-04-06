@@ -56,7 +56,7 @@ for MESH_TYPE in mesh_map.keys():
 
     coords = torch.from_numpy(xyz)
     model_path = "/home/gal.yona/SDFSignatures/SDFSignature/logs/sdf_bunny2/checkpoints/model_current.pth"
-    model_path_local = "logs/sdf_rotated_bunny/checkpoints/bunny_model_current.pth"
+    model_path = "logs/sdf_bunny/checkpoints/rotated_bunny_model_current.pth"
     model = from_pth(
         model_path,
         w0=w0
