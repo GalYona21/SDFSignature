@@ -57,9 +57,10 @@ for MESH_TYPE in mesh_map.keys():
     xyz, normals, mean_curvature, faces = load_ply_with_attributes(mesh_path)
 
     coords = torch.from_numpy(xyz)
-
+    model_path = "/home/gal.yona/SDFSignatures/SDFSignature/logs/sdf_bunny2/checkpoints/model_current.pth"
+    model_path_local = "logs/sdf_bunny2/checkpoints/bunny_model_current.pth"
     model = from_pth(
-        "logs/sdf_bunny2/checkpoints/bunny_model_current.pth",
+        model_path,
         w0=w0
     ).eval()
     print(model)
