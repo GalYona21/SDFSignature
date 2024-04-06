@@ -95,6 +95,7 @@ for MESH_TYPE in mesh_map.keys():
                             normals,
                             mean_curv.squeeze(0).detach().numpy()))
 
+    torch.save(signature, f"./results/{MESH_TYPE}_signature.pt")
 
     attrs = [("nx", "f4"), ("ny", "f4"), ("nz", "f4"), ("quality", "f4")]
     save_ply(verts_min, faces, f"./results/{MESH_TYPE}_min_curvs.ply",
