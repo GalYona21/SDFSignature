@@ -45,6 +45,9 @@ p.add_argument('--point_cloud_path', type=str, default='./data/bunny_curvs.ply',
 p.add_argument('--checkpoint_path', default="./checkpoint.pth", help='Checkpoint to trained model.')
 opt = p.parse_args()
 
+
+torch.manual_seed(42)
+
 plydata = PlyData.read(opt.point_cloud_path)
 x = plydata.elements[0]['x']
 y = plydata.elements[0]['y']
