@@ -58,7 +58,7 @@ for MESH_TYPE in mesh_map.keys():
 
     coords = torch.from_numpy(xyz)
     model_path = "/home/gal.yona/SDFSignatures/SDFSignature/logs/sdf_bunny2/checkpoints/model_current.pth"
-    model_path_local = "logs/sdf_bunny2/checkpoints/bunny_model_current.pth"
+    model_path_local = "logs/sdf_rotated_bunny/checkpoints/bunny_model_current.pth"
     model = from_pth(
         model_path,
         w0=w0
@@ -96,7 +96,7 @@ for MESH_TYPE in mesh_map.keys():
                             normals,
                             mean_curv.squeeze(0).detach().numpy()))
 
-    torch.save(signature, f"./results/{MESH_TYPE}_signature.pt")
+    torch.save(signature, f"./results/rotated_{MESH_TYPE}_signature.pt")
 
     attrs = [("nx", "f4"), ("ny", "f4"), ("nz", "f4"), ("quality", "f4")]
     save_ply(verts_min, faces, f"./results/{MESH_TYPE}_min_curvs.ply",
