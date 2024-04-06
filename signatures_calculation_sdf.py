@@ -12,10 +12,7 @@ from plyfile import PlyData
 
 import diff_operators
 from model import from_pth
-from utils import save_ply
-
-
-
+from utils import save_ply, rotate_point_cloud
 
 
 def signature_calc(output, H, e1, e2):
@@ -55,6 +52,7 @@ for MESH_TYPE in mesh_map.keys():
     # mesh = o3d.t.geometry.TriangleMesh.from_legacy(mesh)
     # print(mesh)
     xyz, normals, mean_curvature, faces = load_ply_with_attributes(mesh_path)
+    xyz, normals = rotate_point_cloud(xyz, normals, angle_x=90, angle_y=30, angle_z=30)
 
     coords = torch.from_numpy(xyz)
     model_path = "/home/gal.yona/SDFSignatures/SDFSignature/logs/sdf_bunny2/checkpoints/model_current.pth"
