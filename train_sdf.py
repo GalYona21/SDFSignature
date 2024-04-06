@@ -57,7 +57,7 @@ ny = plydata.elements[0]['ny']
 nz = plydata.elements[0]['nz']
 vertices = np.stack([x,y,z], axis=1)
 normals = np.stack([nx,ny,nz], axis=1)
-# vertices, normals = rotate_point_cloud(vertices, normals, angle_x=90, angle_y=30, angle_z=30)
+vertices, normals = rotate_point_cloud(vertices, normals, angle_x=90, angle_y=30, angle_z=30)
 
 sdf_dataset = dataio.PointCloud(opt.point_cloud_path, on_surface_points=opt.batch_size, coords=vertices, normals=normals)
 dataloader = DataLoader(sdf_dataset, shuffle=True, batch_size=1, pin_memory=True, num_workers=0)
@@ -78,7 +78,7 @@ if device == 'cuda':
 # Define the loss
 loss_fn = loss.sdf
 
-root_path = os.path.join(opt.logging_root, "sdf_bunny_sanity_check2")
+root_path = os.path.join(opt.logging_root, "sdf_rotated_bunny2")
 
 training.train(model=model, train_dataloader=dataloader, epochs=opt.num_epochs, lr=opt.lr,
                steps_til_summary=opt.steps_til_summary, epochs_til_checkpoint=opt.epochs_til_ckpt,
