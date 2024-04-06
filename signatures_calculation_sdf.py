@@ -59,7 +59,7 @@ for MESH_TYPE in mesh_map.keys():
     coords = torch.from_numpy(xyz)
 
     model = from_pth(
-        "logs/sdf_bunny/checkpoints/model_current.pth",
+        "logs/sdf_bunny2/checkpoints/bunny_model_current.pth",
         w0=w0
     ).eval()
     print(model)
