@@ -59,7 +59,7 @@ normals = np.stack([nx,ny,nz], axis=1)
 vertices, normals = rotate_point_cloud(vertices, normals, angle_x=90, angle_y=30, angle_z=30)
 
 sdf_dataset = dataio.PointCloud(opt.point_cloud_path, on_surface_points=opt.batch_size, coords=vertices, normals=normals)
-dataloader = DataLoader(sdf_dataset, shuffle=True, batch_size=1, pin_memory=True, num_workers=0)
+dataloader = DataLoader(sdf_dataset, shuffle=False, batch_size=1, pin_memory=True, num_workers=0)
 
 # Define the model.
 # if opt.model_type == 'nerf':
