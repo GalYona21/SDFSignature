@@ -72,7 +72,7 @@ config_nn = [hidden_dim]*length_nn
 model = SIREN(n_in_features=3, n_out_features=1, hidden_layer_config=config_nn)
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-model.load_state_dict(torch.load("/home/gal.yona/SDFSignatures/SDFSignature/logs/sdf_bunny_sanity_check/checkpoints/model_final.pth", map_location=device))
+model.load_state_dict(torch.load("/home/gal.yona/SDFSignatures/SDFSignature/logs/bunny_sdf/model_bunny_sanity", map_location=device))
 
 if device == 'cuda':
     model.cuda()
