@@ -46,7 +46,6 @@ p.add_argument('--checkpoint_path', default="./checkpoint.pth", help='Checkpoint
 opt = p.parse_args()
 
 
-torch.manual_seed(42)
 
 plydata = PlyData.read(opt.point_cloud_path)
 x = plydata.elements[0]['x']
@@ -71,7 +70,10 @@ hidden_dim = 256
 length_nn = 5
 config_nn = [hidden_dim]*length_nn
 model = SIREN(n_in_features=3, n_out_features=1, hidden_layer_config=config_nn)
+
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
+model.load_state_dict(torch.load("/home/gal.yona/SDFSignatures/SDFSignature/logs/sdf_bunny_sanity_check/checkpoints/model_final.pth", map_location=device))
+
 if device == 'cuda':
     model.cuda()
 
