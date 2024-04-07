@@ -52,10 +52,11 @@ for MESH_TYPE in mesh_map.keys():
     # mesh = o3d.t.geometry.TriangleMesh.from_legacy(mesh)
     # print(mesh)
     xyz, normals, mean_curvature, faces = load_ply_with_attributes(mesh_path)
-    xyz, normals = rotate_point_cloud(xyz, normals, angle_x=90, angle_y=30, angle_z=30)
+    print(mesh_path)
+    # xyz, normals = rotate_point_cloud(xyz, normals, angle_x=90, angle_y=30, angle_z=30)
 
     coords = torch.from_numpy(xyz)
-    model_path = "/home/gal.yona/SDFSignatures/SDFSignature/logs/sdf_bunny2/checkpoints/model_current.pth"
+    model_path = "/home/gal.yona/SDFSignatures/SDFSignature/logs/sdf_bunny_sanity_check2/checkpoints/model_final.pth"
     # model_path = "logs/sdf_bunny/checkpoints/rotated_bunny_model_current.pth"
     model = from_pth(
         model_path,
@@ -94,7 +95,7 @@ for MESH_TYPE in mesh_map.keys():
                             normals,
                             mean_curv.squeeze(0).detach().numpy()))
 
-    torch.save(signature, f"./results/rotated_{MESH_TYPE}_signature.pt")
+    torch.save(signature, f"./results/{MESH_TYPE}_signature.pt")
 
     attrs = [("nx", "f4"), ("ny", "f4"), ("nz", "f4"), ("quality", "f4")]
     save_ply(verts_min, faces, f"./results/{MESH_TYPE}_min_curvs.ply",
