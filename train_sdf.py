@@ -45,8 +45,9 @@ p.add_argument('--point_cloud_path', type=str, default='./data/bunny_curvs.ply',
 p.add_argument('--checkpoint_path', default="./checkpoint.pth", help='Checkpoint to trained model.')
 opt = p.parse_args()
 
-torch.manual_seed(42)  # Set the random seed for CPU operations
-torch.cuda.manual_seed(42)  # Set the random seed for GPU operations
+torch.manual_seed(0)  # Set the random seed for CPU operations
+torch.cuda.manual_seed(0)  # Set the random seed for GPU operations
+torch.use_deterministic_algorithms(True)
 
 plydata = PlyData.read(opt.point_cloud_path)
 x = plydata.elements[0]['x']
