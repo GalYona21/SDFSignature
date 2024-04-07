@@ -45,7 +45,8 @@ p.add_argument('--point_cloud_path', type=str, default='./data/bunny_curvs.ply',
 p.add_argument('--checkpoint_path', default="./checkpoint.pth", help='Checkpoint to trained model.')
 opt = p.parse_args()
 
-
+torch.manual_seed(42)  # Set the random seed for CPU operations
+torch.cuda.manual_seed(42)  # Set the random seed for GPU operations
 
 plydata = PlyData.read(opt.point_cloud_path)
 x = plydata.elements[0]['x']
@@ -56,7 +57,7 @@ ny = plydata.elements[0]['ny']
 nz = plydata.elements[0]['nz']
 vertices = np.stack([x,y,z], axis=1)
 normals = np.stack([nx,ny,nz], axis=1)
-vertices, normals = rotate_point_cloud(vertices, normals, angle_x=90, angle_y=30, angle_z=30)
+# vertices, normals = rotate_point_cloud(vertices, normals, angle_x=90, angle_y=30, angle_z=30)
 
 sdf_dataset = dataio.PointCloud(opt.point_cloud_path, on_surface_points=opt.batch_size, coords=vertices, normals=normals)
 dataloader = DataLoader(sdf_dataset, shuffle=False, batch_size=1, pin_memory=True, num_workers=0)
@@ -80,7 +81,7 @@ if device == 'cuda':
 # Define the loss
 loss_fn = loss.sdf
 
-root_path = os.path.join(opt.logging_root, "sdf_rotated_bunny_same_init")
+root_path = os.path.join(opt.logging_root, "sdf_bunny_same_init")
 
 training.train(model=model, train_dataloader=dataloader, epochs=opt.num_epochs, lr=opt.lr,
                steps_til_summary=opt.steps_til_summary, epochs_til_checkpoint=opt.epochs_til_ckpt,
