@@ -83,7 +83,7 @@ if device == 'cuda':
 # Define the loss
 loss_fn = loss.sdf
 
-root_path = os.path.join(opt.logging_root, "sdf_bunny_same_init2")
+root_path = os.path.join(opt.logging_root, "sdf_bunny_same_init")
 
 training.train(model=model, train_dataloader=dataloader, epochs=opt.num_epochs, lr=opt.lr,
                steps_til_summary=opt.steps_til_summary, epochs_til_checkpoint=opt.epochs_til_ckpt,
