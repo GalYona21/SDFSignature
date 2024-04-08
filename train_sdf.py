@@ -47,7 +47,8 @@ opt = p.parse_args()
 
 torch.manual_seed(0)  # Set the random seed for CPU operations
 torch.cuda.manual_seed(0)  # Set the random seed for GPU operations
-torch.use_deterministic_algorithms(True)
+np.random.seed(0)
+
 
 plydata = PlyData.read(opt.point_cloud_path)
 x = plydata.elements[0]['x']
@@ -74,7 +75,7 @@ config_nn = [hidden_dim]*length_nn
 model = SIREN(n_in_features=3, n_out_features=1, hidden_layer_config=config_nn)
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-model.load_state_dict(torch.load("/home/gal.yona/SDFSignatures/SDFSignature/logs/bunny_sdf/model_bunny_sanity", map_location=device))
+# model.load_state_dict(torch.load("/home/gal.yona/SDFSignatures/SDFSignature/logs/bunny_sdf/model_bunny_sanity", map_location=device))
 
 if device == 'cuda':
     model.cuda()
